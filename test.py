@@ -11,24 +11,24 @@ import psycopg2
 
 # Initialize connection.
 # Uses st.experimental_singleton to only run once.
-#@st.experimental_singleton
-#def init_connection():
-#    return psycopg2.connect(**st.secrets["postgres"])
+@st.experimental_singleton
+def init_connection():
+    return psycopg2.connect(**st.secrets["postgres"])
 
-#conn = init_connection()
+conn = init_connection()
 
 # Perform query.
 # Uses st.experimental_memo to only rerun when the query changes or after 10 min.
-#@st.experimental_memo(ttl=600)
-#def run_query(query):
-#    with conn.cursor() as cur:
-#        cur.execute(query)
-#        return cur.fetchall()
+@st.experimental_memo(ttl=600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query)
+        return cur.fetchall()
 
-#rows = run_query("SELECT * from messages;")
-#zip_rows = list(zip(*rows))
-#zip_map = list(zip(("id", "ts", "msg", "channel_id", "lang"), zip_rows))
-#st.write(pd.DataFrame({k: vals for k, vals in zip_map}))
+rows = run_query("SELECT * from messages;")
+zip_rows = list(zip(*rows))
+zip_map = list(zip(("id", "ts", "msg", "channel_id", "lang"), zip_rows))
+st.write(pd.DataFrame({k: vals for k, vals in zip_map}))
 # Print results.
 #for row in rows:
 #    st.write(row)
