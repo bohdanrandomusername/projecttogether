@@ -26,7 +26,9 @@ def run_query(query):
         return cur.fetchall()
 
 rows = run_query("SELECT * from messages;")
-
+zip_rows = list(zip(*rows))
+zip_map = list(zip(("id", "ts", "msg", "channel_id", "lang"), zip_rows))
+st.write(pd.DataFrame({k: vals for k, vals in zip_map}))
 # Print results.
-for row in rows:
-    st.write(row)
+#for row in rows:
+#    st.write(row)
